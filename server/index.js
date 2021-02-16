@@ -41,6 +41,11 @@ io.on("connection", (socket) => {
 
     socket.join(user.room);
 
+    io.to(user.room).emit("roomData", {
+      room: user.room,
+      users: getUsersInRoom(user.room),
+    });
+
     callback();
   });
 
@@ -63,6 +68,11 @@ io.on("connection", (socket) => {
     });
 
     removeUser(socket.id);
+
+    io.to(user.room).emit("roomData", {
+      room: user.room,
+      users: getUsersInRoom(user.room),
+    });
   });
 });
 

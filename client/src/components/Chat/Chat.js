@@ -9,11 +9,13 @@ import Input from "../Input/Input";
 import Messages from "../Messages/Messages";
 
 import { useHistory } from "react-router-dom";
+import TextContainer from "../../TextContainer/TextContainer";
 
 let socket;
 const Chat = ({ location }) => {
   const [name, setName] = useState("");
   const [room, setRoom] = useState("");
+  const [users, setUsers] = useState([]);
 
   const [inputText, setInputText] = useState("");
   const [messages, setMessages] = useState([]);
@@ -53,6 +55,12 @@ const Chat = ({ location }) => {
     console.log({ messages });
   }, [messages]);
 
+  useEffect(() => {
+    socket.on("roomData", ({ room, users }) => {
+      setUsers(users);
+    });
+  }, [users]);
+
   const sendMessage = (e) => {
     e.preventDefault();
 
@@ -72,6 +80,7 @@ const Chat = ({ location }) => {
           sendMessage={sendMessage}
         />
       </div>
+      <TextContainer users={users} />
     </div>
   );
 };
